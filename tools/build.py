@@ -93,7 +93,7 @@ def page(date, items, title):
     )
     secs = "".join(section(i, c, items[c]) for i, c in enumerate(CATS) if items[c])
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{html.escape(title)}</title>
 <link rel="stylesheet" href="../style.css"></head><body>
 <header class="top"><a class="home" href="../index.html">{SITE}</a>
 <h1>{html.escape(title)}</h1>
@@ -115,7 +115,7 @@ def home(days):
         for i, (d, t, n, mx) in enumerate(days)
     )
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>{SITE}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{SITE}</title>
 <link rel="stylesheet" href="style.css"></head><body>
 <header class="top home-top"><div class="logo">로고</div><h1>{SITE}</h1></header>
 <main><ul class="days">{li}</ul></main>
