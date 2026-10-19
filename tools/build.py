@@ -3,12 +3,13 @@
 사용법: python3 build.py <비교.xlsx> <수집일 YYYY-MM-DD> <출력 폴더(docs)> [사진주소.xlsx]
 시안 단계라 입력은 비교 엑셀의 '하락' 시트. 운영 때는 같은 틀에 매일 데이터를 넣는다.
 """
-import sys, re, json, html, datetime, pathlib, openpyxl
+import sys, re, json, hashlib, html, datetime, pathlib, openpyxl
 
 CATS = ["생활용품", "라면·즉석식품", "생수·음료", "건강식품", "반려동물", "유아(기저귀+분유)"]
 WD = "월화수목금토일"
 DISCLOSURE = "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
 SITE = "장바규니규조대"
+STYLE_V = "0"  # main()에서 style.css 내용 해시로 바꿔, 옛 CSS가 폰에 남지 않게 한다
 
 
 def won(n):
@@ -94,7 +95,7 @@ def page(date, items, title):
     secs = "".join(section(i, c, items[c]) for i, c in enumerate(CATS) if items[c])
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{html.escape(title)}</title>
-<link rel="stylesheet" href="../style.css"></head><body>
+<link rel="stylesheet" href="../style.css?v={STYLE_V}"></head><body>
 <header class="top"><a class="home" href="../index.html">{SITE}</a>
 <h1>{html.escape(title)}</h1>
 <p class="note">{date} 오전 7시대 수집 기준 · 와우회원 기준 · 가격은 바뀔 수 있어요</p></header>
@@ -116,14 +117,18 @@ def home(days):
     )
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{SITE}</title>
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="style.css?v={STYLE_V}"></head><body>
 <header class="top home-top"><div class="logo">로고</div><h1>{SITE}</h1></header>
 <main><ul class="days">{li}</ul></main>
 <footer></footer><div class="ad-bar">{DISCLOSURE}</div></body></html>"""
 
 
 def main(xlsx, date, out, photo_xlsx=None):
+    global STYLE_V
     out = pathlib.Path(out)
+    css = out / "style.css"
+    if css.exists():
+        STYLE_V = hashlib.md5(css.read_bytes()).hexdigest()[:8]
     d = datetime.date.fromisoformat(date)
     title = f"{date}({WD[d.weekday()]}) 쿠팡 오늘의 가격내림 생필품"
     items = load(xlsx, load_photos(photo_xlsx) if photo_xlsx else None)
