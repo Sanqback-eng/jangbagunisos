@@ -112,7 +112,7 @@ def home(days):
     # days: (날짜, 제목, 내린 상품 수, 최대 하락률(%)) 최신이 앞
     li = "".join(
         f'<li><a href="{d}/index.html"><span>{"<em>NEW</em>" if i == 0 else ""}{short(d, t)}</span>'
-        f'<small>최대 {round(mx)}%</small><b>›</b></a></li>'
+        f'<small>{"최대 " + str(round(mx)) + "%" if n else "내린 상품 없음"}</small><b>›</b></a></li>'
         for i, (d, t, n, mx) in enumerate(days)
     )
     return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
