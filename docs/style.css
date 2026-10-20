@@ -90,3 +90,4 @@ details{font-size:15px}summary{padding:13px 14px;font-size:16px}
 .ad-bar{font-size:14px}
 body{padding-bottom:76px}
 footer:empty{display:none}
+.tag{display:inline-block;background:#eef2f6;color:#4a5a6a;font-size:11px;padding:2px 7px;border-radius:5px;margin-right:6px}
